@@ -1,2 +1,2 @@
 # IS1200_mini_project
-pong for pic32
+pong for kth labKit
