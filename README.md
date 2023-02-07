@@ -1,2 +1,9 @@
 # IS1200_mini_project
-pong for kth labKit
+## Project Description
+Develop a version of pong for the chipKIT Uno32 board with a chipKIT Basic I/O shield as well as an optional control system.
+
+## Goal
+- The game must be rendered on a display.
+- The ball must move in all directions and bounce naturally.
+- The paddles must move in the y-direction.
+- The game must detect if a player wins and display the results.
