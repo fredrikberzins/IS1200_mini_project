@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <settings.c>
 
 typedef struct Ball {
     int w,h;
@@ -16,16 +17,16 @@ static ball_t ball;
 static paddle_t paddles[2];
 
 void initialize() {
-    ball.w = 10;
-    ball.h = 10;
+    ball.w = ball_size;
+    ball.h = ball_size;
     //ball.x = screen_width/2
     //ball.y = screen_height/2
     ball.dx = 1;
     ball.dy = 1;
 
     for (int i = 0; i < 2; i++) {
-        paddles[i].w = 10;
-        paddles[i].h = 10;
+        paddles[i].w = paddle_w;
+        paddles[i].h = paddle_h;
     }
 }
 
