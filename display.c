@@ -1,36 +1,81 @@
 // Display translation file for chipKIT Uno32 board with a I2C screen
 // x=0 and y=0 is in the lower left corner
 // Pong specilaced global functions
-//     move_paddle(paddle_sel[bool(1 left, 0 right)], new_pos[int(0-55)]),
-//     move_ball(new_x[int(0-127)], new_y[int(0-63)], old_x[int(0-127)], old_y[int(0-63)]),
-//     render_points(left_player[int], right_player[int])
+//     print_dotted_line
+//     move_paddle
+//     move_ball
+//     render_points
 // Pong private functions
-//     change_solid(color[bool(0 black, 1 white)], x1[int(0-127)], y1[int(0-63)], x2[int(0-127)], y2[int(0-63)])
-//     change_score(pos, num)//not started scetch
+//     print_solid
+//     print_score
+#include <settings.c>
+#include <math.h>
 
+// print_dotted_line prints dotted line startingfrom bottom and cuts of last dot att top of screan.
+void print_dotted_line() {
+    for(int y=0; y<display_h; y += (dot_h + dot_s)) {
+        if(y < (display_h-dot_h))   //
+            print_solid(True, display_w/2-dot_w/2, y, display_w/2+dot_w/2, y+dot_h-1)
+        else() {
+            print_solid(True, display_w/2-dot_w/2, y, display_w/2+dot_w/2, display_w-1)
+        }
+    }
+}
 
-// Genaral plan
-//change_solid(color, x1, y1, x2, y2)
-//  if (!color)
-//      print black over the whole area
-//  else()
-//      print white over the whole area
-//  if(x1-64*x2-63 > 0)
-//  update screan
+// print_solid color(0 black, 1 white), x1,y1(lower-left point), x2,y2(upper-right point).
+void print_solid(bool color, int x1, int y1, int x2, int y2) {
+    // checks so x1 is smaller then x2
+    if (x1 > x2) {      
+        int temp = x1;
+        x1 = x2;
+        x2 = temp;
+    }
 
-//move_paddle(paddle_sel, new_pos)
-//  change_solid(False,(9+paddle*108),0,(9+paddle*108),63) // paddle place (9+paddle*108) offset 9p and a distance between of 108p
-//  change_solid(True, pos, (9+paddle*108), pos+8, (10+paddle*108))
+    // checks so y1 is smaller then y2
+    if (y1 > y2) {      
+        int temp = y1;
+        y1 = y2;
+        y2 = temp;
+    }
 
-//move_ball([new_x, new_y, old_x, old_y])
-//  change_solid(False, old_x, old_y, old_x+1, old_y+1)
-//  change_solid(True, new_x, new_y, old_x+1, new_y+1)
+    // Clears a part of the screan (black)
+    if (!color) {
+        ### // print black over the whole area
+        if(x1 <= display_w/2+dot_w/2 && x2 >= display_w/2-dot_w/2) {
+            print_dotted_line()
+        }
+    }
 
-//render_points(point[left_player, right_player])
-//for(int i=0; i<2; i++)
-//  for (amount of numbers in points[i])
-//      if (i == 0)
-//          number_cord = 64 + 2 + width * number_pos
-//      if (i == 1)
-//          number_cord = 63 - 2 - width * number-number_pos
-//      delect number in list and add to wwrite array
+    // Prints on part of the screan (white)
+    else() {
+        ### // print white over the whole area
+    }
+
+    // Refresh screan
+    ### // update screan
+}
+
+// move_paddle clears old location of paddle and prints new position for paddle.
+// paddle_sel(0 left, 1 right), new_pos(height of lower pixel of paddle).
+void move_paddle(bool paddle_sel = 0, int new_pos) {
+    print_solid(False,paddle_s,0,paddle_s+paddle_w,display_h-1)
+    print_solid(True,paddle_s+paddle_sel*(display_w-paddle_w-paddle_s),y1,x2,y2)
+}
+
+// move_ball clears old location of ball and prints new position for ball.
+// print_solid new_x,new_y(lower-left pixel of new position of ball)
+// old_x,old_y(lower-left pixel of old position of ball).
+void move_ball(int new_x, int new_y, int old_x, int old_y) {
+    print_solid(False, old_x, old_y, old_x+1, old_y+1)
+    print_solid(True, new_x, new_y, old_x+1, new_y+1)
+}
+
+// render_points clears old score and prints new score value for that side.
+// player(0 left, 1 right), point(amount of points to add to score).
+void render_points(bool player = 0,int point = 1) {
+    if (i == 0)
+        number_cord = 64 + 2 + width * number_pos
+    if (i == 1)
+        number_cord = 63 - 2 - width * number-number_pos
+    delect number in list and add to wwrite array
+}
