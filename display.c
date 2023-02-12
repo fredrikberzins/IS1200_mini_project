@@ -13,6 +13,8 @@
 
 // print_dotted_line prints dotted line startingfrom bottom and cuts of last dot att top of screan.
 void print_dotted_line() {
+    // Erase doted center line
+    Erase ((display_w/2-dot_w/2)-1, (display_w/2+dot_w/2)-1, 0, display_h-1);
     for(int y=0; y<display_h; y += (dot_h + dot_s)) {
         if(y < (display_h-dot_h))   //
             print_solid(True, display_w/2-dot_w/2, y, display_w/2+dot_w/2, y+dot_h-1)
@@ -40,11 +42,18 @@ void print_solid(bool color, int x1, int y1, int x2, int y2) {
 
     // Clears a part of the screan (black)
     if (!color) {
-        ### // print black over the whole area
+        // Erase
+        Erase(x1, y1, x2, y2);
         if(x1 <= display_w/2+dot_w/2 && x2 >= display_w/2-dot_w/2) {
-            print_dotted_line()
+            // Reprint doted center line
+            print_dotted_line();
         }
     }
+    else () {
+        // Draw
+        Draw(x1, y1, x2, y2);
+    }
+    Update ();
 
     // Prints on part of the screan (white)
     else() {
@@ -58,16 +67,24 @@ void print_solid(bool color, int x1, int y1, int x2, int y2) {
 // move_paddle clears old location of paddle and prints new position for paddle.
 // paddle_sel(0 left, 1 right), new_pos(height of lower pixel of paddle).
 void move_paddle(bool paddle_sel = 0, int new_pos) {
-    print_solid(False,paddle_s,0,paddle_s+paddle_w,display_h-1)
-    print_solid(True,paddle_s+paddle_sel*(display_w-paddle_w-paddle_s),y1,x2,y2)
+    // Erase paddle
+    Erase (paddle_s+paddle_sel*(display_w-paddle_w-paddle_s), 0, paddle_s+paddle_w, display_h-1);
+    // Draw paddle
+    Draw (paddle_s+paddle_sel*(display_w-paddle_w-paddle_s), new_pos, paddle_s+paddle_w, new_pos+paddle_h);
+    Update ();
 }
 
 // move_ball clears old location of ball and prints new position for ball.
 // print_solid new_x,new_y(lower-left pixel of new position of ball)
 // old_x,old_y(lower-left pixel of old position of ball).
 void move_ball(int new_x, int new_y, int old_x, int old_y) {
-    print_solid(False, old_x, old_y, old_x+1, old_y+1)
-    print_solid(True, new_x, new_y, old_x+1, new_y+1)
+    // Erase ball
+    Erase (old_x, old_y, old_x+ball_s, old_y+ball_s);
+    print_solid(bool color, int x1, int y1, int x2, int y2)
+    // Draw ball
+    Draw (new_x, new_y, new_x+ball_s, new_y+ball_s);
+    print_solid(bool color, int x1, int y1, int x2, int y2)
+    Update ();
 }
 
 // render_points clears old score and prints new score value for that side.
