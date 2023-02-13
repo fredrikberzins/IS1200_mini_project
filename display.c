@@ -4,12 +4,13 @@
 //     print_dotted_line
 //     move_paddle
 //     move_ball
-//     render_points
+//     render_score
 // Pong private functions
 //     print_solid
 //     print_score
-#include <settings.c>
+#include <stdbool.h>
 #include <math.h>
+#include <settings.c>
 
 // print_dotted_line prints dotted line startingfrom bottom and cuts of last dot att top of screan.
 void print_dotted_line() {
@@ -17,9 +18,9 @@ void print_dotted_line() {
     Erase ((display_w/2-dot_w/2)-1, (display_w/2+dot_w/2)-1, 0, display_h-1);
     for(int y=0; y<display_h; y += (dot_h + dot_s)) {
         if(y < (display_h-dot_h))   //
-            print_solid(True, display_w/2-dot_w/2, y, display_w/2+dot_w/2, y+dot_h-1)
+            print_solid(true, display_w/2-dot_w/2, y, display_w/2+dot_w/2, y+dot_h-1)
         else() {
-            print_solid(True, display_w/2-dot_w/2, y, display_w/2+dot_w/2, display_w-1)
+            print_solid(true, display_w/2-dot_w/2, y, display_w/2+dot_w/2, display_w-1)
         }
     }
 }
@@ -48,7 +49,7 @@ void print_solid(bool color, int x1, int y1, int x2, int y2) {
             // Reprint doted center line
             print_dotted_line();
         }
-    }
+    } 
     else () {
         // Draw
         Draw(x1, y1, x2, y2);
@@ -66,7 +67,7 @@ void print_solid(bool color, int x1, int y1, int x2, int y2) {
 
 // move_paddle clears old location of paddle and prints new position for paddle.
 // paddle_sel(0 left, 1 right), new_pos(height of lower pixel of paddle).
-void move_paddle(bool paddle_sel = 0, int new_pos) {
+void move_paddle(int paddle_sel, int new_pos) {
     // Erase paddle
     Erase (paddle_s+paddle_sel*(display_w-paddle_w-paddle_s), 0, paddle_s+paddle_w, display_h-1);
     // Draw paddle
@@ -89,7 +90,7 @@ void move_ball(int new_x, int new_y, int old_x, int old_y) {
 
 // render_points clears old score and prints new score value for that side.
 // player(0 left, 1 right), point(amount of points to add to score).
-void render_points(bool player = 0,int point = 1) {
+void render_score(bool player = 0,int point = 1) {
     if (i == 0)
         number_cord = 64 + 2 + width * number_pos
     if (i == 1)

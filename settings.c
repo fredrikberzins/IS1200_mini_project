@@ -5,7 +5,8 @@ int display_w = 128;    // display width = pixels
 int display_h = 64;     // display height = pixels
 
 // Ball
-int ball_s = 2;      // ball size = pixels (it is a rectangle NOT ROUNDED)
+int ball_s = 2;         // ball size = pixels (it is a rectangle NOT ROUNDED)
+int ball_v = 1;         // ball speed
 
 // Player paddle
 int paddle_w = 2;       // paddle width = pixels
