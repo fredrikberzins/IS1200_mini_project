@@ -17,3 +17,8 @@ int paddle_s = 8;       // paddle spacing to edge = pixels
 int dot_w = 2;          // dot width = pixels (must be even)
 int dot_h = 2;          // dot height = pixels
 int dot_s = 2;          // dot spacing to edge = pixels
+
+// Score
+int player1 = 0;        // score for player 1
+int player2 = 0;        // score for player 2
+int limit = 5;          // score required to win, i.e first to x wins

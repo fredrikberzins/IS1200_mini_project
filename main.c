@@ -41,8 +41,13 @@ void initialize() {
 }
 
 void checkCollision() {
-    if (ball.x + ball_s >= display_w || ball.x <= 0) {
-        ball.dx = -ball.dx;
+    if (ball.x + ball_s >= display_w) {
+        player1++;
+        //Reset ball to middle
+    }
+    if (ball.x <= 0) {
+        player2++;
+        //Reset ball to middle
     }
     if (ball.y + ball_s >= display_h || ball.y <= 0) {
         ball.dy = -ball.dy;
@@ -53,17 +58,27 @@ void checkCollision() {
         }
     }
 }
+void checkScore() {
+    if (player1 == limit) {
+        // player 1 wins       
+    }
+    if (player2 == limit) {
+        // player 2 wins       
+    }
+}
 
 int main() {
     int quit = 0;
     while (quit == 0) {
+        //initialize();
         //display start screen
         //start when one player pushes a button
-        //move ball
         //move paddles
-        //check collisions
+        //move ball
+        //checkCollision();
         //check score
         //display end screen
+        sleep(0.05); // limits program to 20 updates per second => 20fps
     }
 
     return 0;
