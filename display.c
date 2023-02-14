@@ -17,10 +17,10 @@ void print_dotted_line() {
     // Erase doted center line
     Erase ((display_w/2-dot_w/2)-1, (display_w/2+dot_w/2)-1, 0, display_h-1);
     for(int y=0; y<display_h; y += (dot_h + dot_s)) {
-        if(y < (display_h-dot_h))   //
-            print_solid(true, display_w/2-dot_w/2, y, display_w/2+dot_w/2, y+dot_h-1)
-        else() {
-            print_solid(true, display_w/2-dot_w/2, y, display_w/2+dot_w/2, display_w-1)
+        if(y < (display_h-dot_h)) {  //
+            print_solid(true, display_w/2-dot_w/2, y, display_w/2+dot_w/2, y+dot_h-1);
+        } else() {
+            print_solid(true, display_w/2-dot_w/2, y, display_w/2+dot_w/2, display_w-1);
         }
     }
 }

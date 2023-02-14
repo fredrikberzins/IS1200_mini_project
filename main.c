@@ -15,7 +15,8 @@ typedef struct Paddle {
 } paddle_t;
 
 typedef struct Controls {
-    int 
+    int up1, down1;
+    int up2, down2;
 } controls_t;
 
 static ball_t ball;
@@ -37,6 +38,15 @@ void initialize() {
     }
 
     print_dotted_line();
+}
+
+void checkCollision() {
+    if (ball.x + ball_s >= display_w || ball.x <= 0) {
+        ball.dx = -ball.dx;
+    }
+    if (ball.y + ball_s >= display_h || ball.y <= 0) {
+        ball.dy = -ball.dy;
+    }
 }
 
 int main() {
