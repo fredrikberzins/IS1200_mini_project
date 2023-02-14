@@ -47,6 +47,11 @@ void checkCollision() {
     if (ball.y + ball_s >= display_h || ball.y <= 0) {
         ball.dy = -ball.dy;
     }
+    for (int i = 0; i < 2; i++) {
+        if (ball.y + (ball_s/2) >= paddles[i].y && ball.y + (ball_s/2) <= paddles[i].y + paddle_h && ball.x + (ball_s/2) == paddles[i].x) {
+            ball.dx = -ball.dx;
+        }
+    }
 }
 
 int main() {
