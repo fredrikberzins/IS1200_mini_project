@@ -31,7 +31,7 @@ void initialize() {
     ball.x = display_w/2;
     ball.y = display_h/2;
     ball.dx = ball_v;
-    ball.dy = ball_v;
+    ball.dy = ball_v/(rand()%3 + 1);
 
     for (int i = 0; i < 2; i++) {
         paddles[i].w = paddle_w;
@@ -42,7 +42,17 @@ void initialize() {
     print_dotted_line();
 }
 
-void checkControls() {
+void reset() {
+    ball.x = display_w/2;
+    ball.y = display_h/2;
+    ball.dy = ball_v/(rand()%3 + 1);
+    for (int i = 0; i < 2; i++) {
+        move_paddle(i, (display_h-paddle_h)/2);
+    }
+    sleep(3);
+}
+
+void check_controls() {
     //If pins = HIGH
     controls.up1 = 1;
     controls.up2 = 1;
@@ -55,25 +65,41 @@ void checkControls() {
     controls.down2 = 0;
 }
 
-void checkCollision() {
-    if (ball.x + ball_s >= display_w) {
+void move() {
+    if (controls.up1 == 1 && controls.down1 != 1) {
+        move_paddle(0, paddles[0].y + paddle_v);
+    }
+    if (controls.up2 == 1 && controls.down2 != 1) {
+        move_paddle(1, paddles[1].y + paddle_v);
+    }
+    if (controls.down1 == 1 && controls.up1 != 1) {
+        move_paddle(0, paddles[0].y - paddle_v);
+    }
+    if (controls.down2 == 1 && controls.up2 != 1) {
+        move_paddle(1, paddles[1].y - paddle_v);
+    }
+}
+
+void check_collision() {
+    if (ball.x + ball_s >= display_w-1) {
         player1++;
-        //Reset ball to middle
+        reset();
     }
     if (ball.x <= 0) {
         player2++;
-        //Reset ball to middle
+        reset();
     }
     if (ball.y + ball_s >= display_h || ball.y <= 0) {
         ball.dy = -ball.dy;
     }
     for (int i = 0; i < 2; i++) {
-        if (ball.y + (ball_s/2) >= paddles[i].y && ball.y + (ball_s/2) <= paddles[i].y + paddle_h && ball.x + (ball_s/2) == paddles[i].x) {
+        if (ball.y + (ball_s/2) >= paddles[i].y && ball.y + (ball_s/2) <= paddles[i].y + paddle_h 
+        && ball.x + (ball_s/2) == paddles[i].x + (paddle_w/2)) {
             ball.dx = -ball.dx;
         }
     }
 }
-void checkScore() {
+void check_score() {
     if (player1 == limit) {
         // player 1 wins       
     }
@@ -83,19 +109,18 @@ void checkScore() {
 }
 
 int main() {
+    initialize();
+    //display start screen
+    //start when one player pushes a button
     int quit = 0;
     while (quit == 0) {
-        initialize();
-        //display start screen
-        //start when one player pushes a button
-        checkControls();
-        //move paddles
-        //move ball
-        checkCollision();
-        checkScore();
-        //display end screen
-        sleep(0.05); // limits program to 20 updates per second => 20fps
+        check_controls();
+        move();
+        move_ball(ball.x + ball.dx, ball.y + ball.dy, ball.x, ball.y);
+        check_collision();
+        check_score();
+        sleep(0.03); // limits program to update once every 3 ms
     }
-
+    //display end screen
     return 0;
 }
