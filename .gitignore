@@ -1,0 +1,7 @@
+*.exe
+*.hex
+*.elf
+*.c.o
+*.S.o
+*.c.P
+*.S.P
