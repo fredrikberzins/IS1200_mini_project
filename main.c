@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+//#include <pic32mx.h>
 #include "settings.c"
 #include "display.c"
 
@@ -21,6 +22,7 @@ typedef struct Controls {
 
 static ball_t ball;
 static paddle_t paddles[2];
+static controls_t controls;
 
 void initialize() {
     //Set necessary values
@@ -38,6 +40,19 @@ void initialize() {
     }
 
     print_dotted_line();
+}
+
+void checkControls() {
+    //If pins = HIGH
+    controls.up1 = 1;
+    controls.up2 = 1;
+    controls.down1 = 1;
+    controls.down2 = 1;
+    //If pins = LOW
+    controls.up1 = 0;
+    controls.up2 = 0;
+    controls.down1 = 0;
+    controls.down2 = 0;
 }
 
 void checkCollision() {
@@ -70,13 +85,14 @@ void checkScore() {
 int main() {
     int quit = 0;
     while (quit == 0) {
-        //initialize();
+        initialize();
         //display start screen
         //start when one player pushes a button
+        checkControls();
         //move paddles
         //move ball
-        //checkCollision();
-        //check score
+        checkCollision();
+        checkScore();
         //display end screen
         sleep(0.05); // limits program to 20 updates per second => 20fps
     }
