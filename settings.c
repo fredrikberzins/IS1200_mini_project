@@ -22,4 +22,4 @@ int dot_s = 2;          // dot spacing to edge = pixels
 // Score
 int player1 = 0;        // score for player 1
 int player2 = 0;        // score for player 2
-int limit = 5;          // score required to win, i.e first to x wins
+int limit = 5;          // score required to win(max 10, other wise the score printing will fail), i.e first to x wins
