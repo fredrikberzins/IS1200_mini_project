@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <pic32mx.h>
+#include <pic32mx.h>
 #include "settings.c"
 #include "display.c"
 
@@ -24,8 +24,7 @@ static ball_t ball;
 static paddle_t paddles[2];
 static controls_t controls;
 
-void initialize() {
-    //Set necessary values
+void initialize() {     //Set necessary values
     ball.w = ball_s;
     ball.h = ball_s;
     ball.x = display_w/2;
@@ -42,7 +41,7 @@ void initialize() {
     print_dotted_line();
 }
 
-void reset() {
+void reset() {      //Reset everything to starting position and wait 3 sec
     ball.x = display_w/2;
     ball.y = display_h/2;
     ball.dy = ball_v/(rand()%3 + 1);
@@ -53,16 +52,29 @@ void reset() {
 }
 
 void check_controls() {
-    //If pins = HIGH
-    controls.up1 = 1;
-    controls.up2 = 1;
-    controls.down1 = 1;
-    controls.down2 = 1;
-    //If pins = LOW
-    controls.up1 = 0;
-    controls.up2 = 0;
-    controls.down1 = 0;
-    controls.down2 = 0;
+    if (PORTF & 0x1) {      // 0000 0001 (PORTF)    BTN1
+        controls.up2 = 1;
+    } else {
+        controls.up2 = 0;
+    }
+
+    if (PORTE & 0x20) {     // 0010 0000 (PORTE)    BTN2
+        controls.down2 = 1;
+    } else {
+        controls.down2 = 0;
+    }
+
+    if (PORTE & 0x40) {     // 0100 0000 (PORTE)    BTN3
+        controls.down1 = 1;
+    } else {
+        controls.down1 = 0;
+    }
+
+    if (PORTE & 0x80) {     // 1000 0000 (PORTE)    BTN4
+        controls.up1 = 1;
+    } else {
+        controls.up1 = 0;
+    }
 }
 
 void move() {
