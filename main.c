@@ -24,7 +24,9 @@ static ball_t ball;
 static paddle_t paddles[2];
 static controls_t controls;
 
-void initialize() {     //Set necessary values
+int quit = 0;
+
+void initialize() {         //Set necessary values
     ball.w = ball_s;
     ball.h = ball_s;
     ball.x = display_w/2;
@@ -41,7 +43,7 @@ void initialize() {     //Set necessary values
     print_dotted_line();
 }
 
-void reset() {      //Reset everything to starting position and wait 3 sec
+void reset() {              //Reset everything to starting position and wait 3 sec
     ball.x = display_w/2;
     ball.y = display_h/2;
     ball.dy = ball_v/(rand()%3 + 1);
@@ -113,10 +115,12 @@ void check_collision() {
 }
 void check_score() {
     if (player1 == limit) {
-        // player 1 wins       
+        // player 1 wins   
+        quit = 1;   
     }
     if (player2 == limit) {
-        // player 2 wins       
+        // player 2 wins 
+        quit = 1;     
     }
 }
 
@@ -124,7 +128,6 @@ int main() {
     initialize();
     //display start screen
     //start when one player pushes a button
-    int quit = 0;
     while (quit == 0) {
         check_controls();
         move();
