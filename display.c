@@ -46,15 +46,15 @@ void print_solid(bool color, int x1, int y1, int x2, int y2) {
             // Reprint doted center line
             print_dotted_line();
         }
-        if(y2 >= /*### lower limit for score*/&& x1 <= /*###outer right side of score*/ && x2 >= /*###outer left side of score*/) {
-            print_score(false, player1)
-            print_score(true, player2)
+        if(y2 >= /*### lower limit for score*/&& x1 <= /*### outer right side of score*/ && x2 >= /*### outer left side of score*/) {
+            print_score(false, player1);
+            print_score(true, player2);
         }
     } 
     else {
         // Draw function
     }
-    Update ();
+    dispaly_update();
 }
 
 // move_paddle clears old location of paddle and prints new position for paddle.
@@ -78,10 +78,12 @@ void move_ball(int new_x, int new_y, int old_x, int old_y) {
 
 // render_points clears old score and prints new score value for that side.
 // player(0 left, 1 right), point(amount of points to add to score).
-void print_score(bool player,int point) {
-    if (player)
-        score_pos = display_w/2 + 2
-    if (player)
-        score_pos = display_w/2 - 2
-    // pritn out number in position defined by score_pos
+void print_score(int player_sel ,int point) {
+    int score_pos = display_w/2 -dot_w/2 - 2 - /*### number width*/ + player_sel*(dot_w + 2 + /*### number width*/*2)
+    // erase old score
+    print_solid(false, score_pos, display_h-/*### score heght*/, score_pos + /*### number width*/, display_h-1);
+    // print out new score
+
+    
+    dispaly_update();
 }
