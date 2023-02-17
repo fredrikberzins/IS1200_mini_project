@@ -10,7 +10,6 @@
 //     print_score
 #include <stdbool.h>
 #include <math.h>
-#include <settings.c>
 
 // print_dotted_line prints dotted line startingfrom bottom and cuts of last dot att top of screan.
 void print_dotted_line() {
