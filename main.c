@@ -134,7 +134,7 @@ void check_collision() {
     }
     for (int i = 0; i < 2; i++) {
         if (ball.y + (ball_s/2) >= paddles[i].y && ball.y + (ball_s/2) <= paddles[i].y + paddle_h 
-        && ball.x + (ball_s/2) == (paddle_s + (paddle_w/2)) + i*(display_w-paddle_s-(paddle_w))) {
+        && ball.x + (ball_s/2) == (paddle_s + (paddle_w)) + i*(display_w-(paddle_s*2)-(paddle_w*2))) {
             ball.dx = -ball.dx;
         }
     }
@@ -160,7 +160,7 @@ int main() {
         move_ball(ball.x + ball.dx, ball.y + ball.dy, ball.x, ball.y);
         check_collision();
         check_score();
-        sleep(0.03); // limits program to update once every 3 ms
+        sleep(0.03); // limits program to update once every 30 ms
     }
     //display end screen
     return 0;
