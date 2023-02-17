@@ -17,7 +17,7 @@ void print_dotted_line() {
         if(y < (display_h-dot_h)) {
             print_solid(true, display_w/2-dot_w/2, y, display_w/2+dot_w/2, y+dot_h-1);
         }
-        else() {
+        else {
             print_solid(true, display_w/2-dot_w/2, y, display_w/2+dot_w/2, display_h-1);
         }
     }
@@ -51,7 +51,7 @@ void print_solid(bool color, int x1, int y1, int x2, int y2) {
             print_score(true, player2)
         }
     } 
-    else () {
+    else {
         // Draw function
     }
     Update ();
