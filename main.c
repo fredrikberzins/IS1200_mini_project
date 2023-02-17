@@ -4,7 +4,7 @@
 #include "display.c"
 
 // Global varibles/settings varibles
-
+/*---===---===---===---===---===---===---===---===---===---*/
 // Display
 int display_w = 128;    // display width = pixels
 int display_h = 32;     // display height = pixels
@@ -28,7 +28,7 @@ int dot_s = 2;          // dot spacing to edge = pixels
 int player1 = 0;        // score for player 1
 int player2 = 0;        // score for player 2
 int limit = 5;          // score required to win(max 10, other wise the score printing will fail), i.e first to x wins
-
+/*---===---===---===---===---===---===---===---===---===---*/
 // Structs
 typedef struct Ball {
     int w,h;
