@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pic32mx.h>
 #include <stdbool.h>
 #include <math.h>
 
@@ -8,6 +11,29 @@
 extern const uint8_t const font[128*8];
 // Declare text buffer
 extern char textbuffer[4][16];
+
+// Global varibles/settings import from main
+/*---===---===---===---===---===---===---===---===---===---*/
+// Display
+extern int display_w;    // display width = pixels
+extern int display_h;     // display height = pixels
+// Ball
+extern int ball_s;         // ball size = pixels (it is a rectangle NOT ROUNDED)
+extern int ball_v;         // ball speed
+// Player paddle
+extern int paddle_w;       // paddle width = pixels
+extern int paddle_h;      // paddle height = pixels
+extern int paddle_s;       // paddle spacing to edge = pixels
+extern int paddle_v;       // paddle move speed
+// Center dot/dot line
+extern int dot_w;          // dot width = pixels (must be even)
+extern int dot_h;          // dot height = pixels
+extern int dot_s;          // dot spacing to edge = pixels
+// Score
+extern int player1;        // score for player 1
+extern int player2;        // score for player 2
+extern int limit;          // score required to win(max 10, other wise the score printing will fail), i.e first to x wins
+/*---===---===---===---===---===---===---===---===---===---*/
 
 // Display mode:
 // Command/data mode
@@ -24,24 +50,24 @@ extern char textbuffer[4][16];
 
 // Functions:
 // Forward declartion of all disply functions
-uint8_t spi_send_recv(uint8_t data),
+uint8_t spi_send_recv(uint8_t);
 void display_init();
 // Clear/Update
 void display_clear();
 void display_update();
 // Splash screens start/end
 void print_start_screen();
-void print_end_screen(int player);
+void print_end_screen(int);
 // Game related:
 // print string/score
-void print_string(int line, char *str);
-void print_score(int player_sel ,int point);
+void print_string(int, char *);
+void print_score(int ,int);
 // print solid/center line
-void print_solid(bool white, int x1, int y1, int x2, int y2);
+void print_solid(bool, int, int, int, int);
 void print_dotted_line();
 // Move ball/paddle
-void move_ball(int new_x, int new_y, int old_x, int old_y);
-void move_paddle(int paddle_sel, int new_pos);
+void move_ball(int, int, int, int);
+void move_paddle(int, int);
 /*---===---===---===---===---===---===---===---===---===---*/
 
 // SPI send and recive
@@ -83,6 +109,46 @@ void display_init() {
 	spi_send_recv(0xAF);
 }
 
+void display_main() {
+	/*
+		This will set the peripheral bus clock to the same frequency
+		as the sysclock. That means 80 MHz, when the microcontroller
+		is running at 80 MHz. Changed 2017, as recommended by Axel.
+	*/
+	SYSKEY = 0xAA996655;  /* Unlock OSCCON, step 1 */
+	SYSKEY = 0x556699AA;  /* Unlock OSCCON, step 2 */
+	while(OSCCON & (1 << 21)); /* Wait until PBDIV ready */
+	OSCCONCLR = 0x180000; /* clear PBDIV bit <0,1> */
+	while(OSCCON & (1 << 21));  /* Wait until PBDIV ready */
+	SYSKEY = 0x0;  /* Lock OSCCON */
+	
+	/* Set up output pins */
+	AD1PCFG = 0xFFFF;
+	ODCE = 0x0;
+	TRISECLR = 0xFF;
+	PORTE = 0x0;
+	
+	/* Output pins for display signals */
+	PORTF = 0xFFFF;
+	PORTG = (1 << 9);
+	ODCF = 0x0;
+	ODCG = 0x0;
+	TRISFCLR = 0x70;
+	TRISGCLR = 0x200;
+
+	/* Set up SPI as master */
+	SPI2CON = 0;
+	SPI2BRG = 4;
+	/* SPI2STAT bit SPIROV = 0; */
+	SPI2STATCLR = 0x40;
+	/* SPI2CON bit CKP = 1; */
+    SPI2CONSET = 0x40;
+	/* SPI2CON bit MSTEN = 1; */
+	SPI2CONSET = 0x20;
+	/* SPI2CON bit ON = 1; */
+	SPI2CONSET = 0x8000;
+}
+
 // Clears display
 void display_clear() {
 	spi_send_recv(0xAE);
@@ -120,19 +186,22 @@ void display_update() {
 // Draw Start screan
 void print_start_screen() {
 	display_clear();
-	display_string( 0, " Pong");
-	display_string( 1, " by");
-	display_string( 2, " Felix &");
-	display_string( 3, " Fredrik" );
+	print_string( 0, " Pong");
+	print_string( 1, " by");
+	print_string( 2, " Felix &");
+	print_string( 3, " Fredrik" );
     display_update();
 }
 
 // Draw end screan
 void print_end_screen(int player) {
 	display_clear();
-	display_string( 0, " Player %d win", player);
-	display_string( 1, " ending score [%d:%d]", player1, player2);
-	display_string( 3, " Pong by Felix & Fredrik");
+	//" Player "+ player + " won";
+	//" Ending score [" + player1 + ":" + player2 + "]";
+	print_string( 0, "PLayer");
+	print_string( 1, (char*)&player+30);
+	print_string( 2, "won");
+	print_string( 3, " Pong by Felix & Fredrik");
     display_update();
 }
 
