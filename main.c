@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pic32mx.h>
-#include "display.c"
 
 // Global varibles/settings varibles:
 /*---===---===---===---===---===---===---===---===---===---*/
@@ -55,7 +54,8 @@ void initialize() {         //Set necessary values
     ball.x = display_w/2;
     ball.y = display_h/2;
     ball.dx = ball_v;
-    ball.dy = ball_v/(rand()%3 + 1);
+    ball.dy = ball_v/2;
+    //ball.dy = ball_v/(rand()%3 + 1);
 
     for (int i = 0; i < 2; i++) {
         paddles[i].w = paddle_w;
@@ -69,11 +69,12 @@ void initialize() {         //Set necessary values
 void reset() {              //Reset everything to starting position and wait 3 sec
     ball.x = display_w/2;
     ball.y = display_h/2;
-    ball.dy = ball_v/(rand()%3 + 1);
+    ball.dy = ball_v/2;
+    //ball.dy = ball_v/( rand() % 3 + 1);
     for (int i = 0; i < 2; i++) {
         move_paddle(i, (display_h-paddle_h)/2);
     }
-    sleep(3);
+    sleep(3000);
 }
 
 void check_controls() {
@@ -148,18 +149,18 @@ void check_score() {
 }
 
 int main() {
-    initialize();
     display_init();
+    initialize();
     print_start_screen();
     // ### start when one player pushes a button
     while (quit == 0) {
-        display_main();
-        check_controls();
-        move();
-        move_ball(ball.x + ball.dx, ball.y + ball.dy, ball.x, ball.y);
-        check_collision();
-        check_score();
-        sleep(0.03); // limits program to update once every 30 ms
+    //    display_main();
+    //    check_controls();
+    //    move();
+    //    move_ball(ball.x + ball.dx, ball.y + ball.dy, ball.x, ball.y);
+    //    check_collision();
+    //    check_score();
+        sleep(30); // limits program to update once every 30 ms
     }
     //display end screen
     return 0;

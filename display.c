@@ -81,15 +81,15 @@ uint8_t spi_send_recv(uint8_t data) {
 // Initiate display
 void display_init() {
     DISPLAY_CHANGE_TO_COMMAND_MODE;
-	sleep(0.01);
+	sleep(10);
 	DISPLAY_ACTIVATE_VDD;
-	sleep(1);
+	sleep(1000);
 	
 	spi_send_recv(0xAE);
 	DISPLAY_ACTIVATE_RESET;
-	sleep(0.01);
+	sleep(10);
 	DISPLAY_DO_NOT_RESET;
-	sleep(0.01);
+	sleep(10);
 	
 	spi_send_recv(0x8D);
 	spi_send_recv(0x14);
@@ -98,7 +98,7 @@ void display_init() {
 	spi_send_recv(0xF1);
 	
 	DISPLAY_ACTIVATE_VBAT;
-	sleep(1);
+	sleep(1000);
 	
 	spi_send_recv(0xA1);
 	spi_send_recv(0xC8);
@@ -153,7 +153,7 @@ void display_main() {
 void display_clear() {
 	spi_send_recv(0xAE);
 	DISPLAY_ACTIVATE_RESET;
-	sleep(0.01);
+	sleep(10);
 	DISPLAY_DO_NOT_RESET;
 	display_update();
 }
