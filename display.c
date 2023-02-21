@@ -15,14 +15,14 @@ extern char textbuffer[4][16];
 // Global varibles/settings import from main
 /*---===---===---===---===---===---===---===---===---===---*/
 // Display
-extern int display_w;    // display width = pixels
-extern int display_h;     // display height = pixels
+extern int display_w;      // display width = pixels
+extern int display_h;      // display height = pixels
 // Ball
 extern int ball_s;         // ball size = pixels (it is a rectangle NOT ROUNDED)
 extern int ball_v;         // ball speed
 // Player paddle
 extern int paddle_w;       // paddle width = pixels
-extern int paddle_h;      // paddle height = pixels
+extern int paddle_h;       // paddle height = pixels
 extern int paddle_s;       // paddle spacing to edge = pixels
 extern int paddle_v;       // paddle move speed
 // Center dot/dot line

@@ -83,6 +83,3 @@ $(DEPDIR):
 # Check dependencies
 -include $(CFILES:%.c=$(DEPDIR)/%.c.P)
 -include $(ASFILES:%.S=$(DEPDIR)/%.S.P)
-
-#all:
-#	gcc main.c display.c font_data.c -o main

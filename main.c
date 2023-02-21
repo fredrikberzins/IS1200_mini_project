@@ -152,7 +152,9 @@ int main() {
     display_init();
     initialize();
     print_start_screen();
-    // ### start when one player pushes a button
+    while ((PORTE & 0xC0) == 0x00 && (PORTF & 0x1) == 0x0) {
+        // Wait for button press 
+    }
     while (quit == 0) {
     //    display_main();
     //    check_controls();
