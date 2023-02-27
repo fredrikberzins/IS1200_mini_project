@@ -1,4 +1,4 @@
-.globl sleep
+.global sleep
 
 sleep:
 	move 	$t0, $a0		# Set $t1, $a0			
