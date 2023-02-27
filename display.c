@@ -46,10 +46,14 @@ void display_main() {
 
 // Clears display
 void display_clear(){
-	for (int i = 0; i < 512; i++) {
+	for(int i = 0; i < 512; i++) {
 		display[i] = 0xff;
 	}
 	display_image(0, display);
+	for(int i = 0; i < 4; i++) {
+		print_string( i, "");
+	}
+	display_update();
 }
 
 // Draw Start screan
@@ -65,14 +69,13 @@ void print_start_screen() {
 // Draw end screan
 void print_end_screen(int player) {
 	display_clear();
-	//" Player "+ player + " won";
-	//" Ending score [" + player1 + ":" + player2 + "]";
-	char row_0 = " PLAYER " + (player+0x30);
-	char row_3 = " " + (player1+0x30) + " : " + (player2+0x30);
-	print_string( 0, row_0);
-	print_string( 1, "WON PONG");
-	print_string( 2, " SCORE");
-	print_string( 3, row_3);
+	if(player == 1){
+		print_string( 0, " PLAYER NR:1");
+	}
+	else{
+		print_string( 0, " PLAYER NR:2");
+	}
+	print_string( 1, " WON PONG");
     display_update();
 }
 
