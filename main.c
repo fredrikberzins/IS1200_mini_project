@@ -1,32 +1,28 @@
 /* Written by Felix Bergqvist Widström and Fredrik Berzins (2023) */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <pic32mx.h>
 #include "header.h"
 
-// Global varibles/settings varibles:
+/* === Global varibles/settings varibles === */
 /*---===---===---===---===---===---===---===---===---===---*/
 // Display
-int display_w = 128;    // display width = pixels
-int display_h = 32;     // display height = pixels
+int display_w = 128;    // Display width = pixels
+int display_h = 32;     // Display height = pixels
 // Ball
-int ball_s = 2;         // ball size = pixels (it is a rectangle NOT ball(rounded rectangle))
-double ball_v = 1;      // ball speed
+int ball_s = 2;         // Ball size = pixels (it is a rectangle NOT ball(rounded rectangle))
+double ball_v = 1;      // Ball speed
 // Player paddle
-int paddle_w = 3;       // paddle width = pixels
-int paddle_h = 10;      // paddle height = pixels
-int paddle_s = 8;       // paddle spacing to edge = pixels
-int paddle_v = 1;       // paddle move speed
+int paddle_w = 3;       // Paddle width = pixels
+int paddle_h = 10;      // Paddle height = pixels
+int paddle_s = 8;       // Paddle spacing to edge = pixels
+int paddle_v = 1;       // Paddle move speed
 // Center dot/dot line
-int dot_w = 1;          // dot width = pixels (must be even)
-int dot_h = 2;          // dot height = pixels
-int dot_s = 5;          // dot spacing to edge = pixels
+int dot_w = 1;          // Dot width = pixels (must be even)
+int dot_h = 2;          // Dot height = pixels
+int dot_s = 5;          // Dot spacing to edge = pixels
 /*---===---===---===---===---===---===---===---===---===---*/
 
-// Structs
+/* === Structs === */
 typedef struct Ball {
-    int w,h;
     double x,y;
     double dx,dy;
 } ball_t;
@@ -40,25 +36,23 @@ typedef struct Controls {
     int up2, down2;
 } controls_t;
 
-// Field variables
+/* === Field variables === */
 static ball_t ball;
 static paddle_t paddles[2];
 static controls_t controls;
 
 int quit = 0;
 
-//Functions
-void initialize() {         //Set necessary values and display necessary items
+/* === Functions === */
+// Set necessary values and display necessary items
+void initialize() {
     display_clear();
-    ball.w = ball_s;
-    ball.h = ball_s;
-    ball.x = display_w/2;
-    ball.y = display_h/2;
+    ball.x = display_w/2-ball_s/2;
+    ball.y = (rand()%((display_h/2)-ball_s)+(display_h/4));
     ball.dx = ball_v;
-    ball.dy = ball_v/3;
+    ball.dy = ball_v/(((rand()%22) / 10) + 1.8);
 
     move_ball((int)(ball.x),(int)(ball.y),0,0);
-
 
     for (int i = 0; i < 2; i++) {
         paddles[i].y = (display_h/2-paddle_h/2);
@@ -66,10 +60,10 @@ void initialize() {         //Set necessary values and display necessary items
     }
 
     print_dotted_line();
-    display_image(0, display);
 }
 
-void update_controls() {    // Checks for inputs and sets values for movement (LEDs for debug)
+// Checks for inputs and sets values for movement (LEDs for debug)
+void update_controls() {
     if (PORTF & 0x2) {      // 0000 0010 (PORTF)    BTN1
         controls.up2 = 1;
         PORTESET = 0x1;
@@ -103,8 +97,8 @@ void update_controls() {    // Checks for inputs and sets values for movement (L
     }
 }
 
-
-bool check_controls() {     // Checks if a button is pressed and returns true or false
+// Checks if a button is pressed and returns true or false
+bool check_controls() {
     if (PORTF & 0x2) {
         return true;
     }
@@ -122,13 +116,15 @@ bool check_controls() {     // Checks if a button is pressed and returns true or
     return false;
 }
 
-void intialize_controls() { // Sets pins as inputs or outputs for buttons and LEDs
-    TRISECLR = 0xFF;
-    PORTFSET = 0x02;
-    PORTDSET = 0xE0;
+// Sets pins as inputs or outputs for buttons and LEDs
+void intialize_controls() {
+    TRISECLR = 0xFF;        // Sets LEDs as outputs
+    PORTFSET = 0x02;        // Sets button 1 as input
+    PORTDSET = 0xE0;        // Sets button 2,3,4 as inputs
 }
 
-void move() {               // Updates position values for paddles depending on currently active controls
+// Updates position values for paddles depending on currently active controls
+void move() {
     if (controls.up1 == 1 && controls.down1 != 1) {
         paddles[0].y -= paddle_v;
         if (paddles[0].y <= 0){
@@ -163,7 +159,9 @@ void move() {               // Updates position values for paddles depending on 
     }
 }
 
-void check_collision() {    // Changes direction of the ball on collision with paddles and the top/bottom of the screen or ends the game if the ball misses a paddle
+// Changes direction of the ball on collision with paddles and the 
+// Top/bottom of the screen or ends the game if the ball misses a paddle
+void check_collision() {
     if ((int)(ball.x) + ball_s >= display_w-1) {
         quit = 1;
     }
@@ -182,7 +180,8 @@ void check_collision() {    // Changes direction of the ball on collision with p
     }
 }
 
-void game() {               // Game loop for restarting on win/loss
+// Game loop for restarting on win/loss
+void game() {
     print_start_screen();
     while (true) {          // Wait for button press
         if (check_controls()) {
@@ -199,7 +198,7 @@ void game() {               // Game loop for restarting on win/loss
         ball.x += ball.dx;
         ball.y += ball.dy;
         check_collision();
-        sleep(10);          // limits program to update once every 30 ms
+        sleep(10);          // Limits program to update once every 10 ms (100 fps)
     }
     print_end_screen(quit);
     sleep(500);
@@ -212,7 +211,6 @@ void game() {               // Game loop for restarting on win/loss
 }
 
 int main() {
-    display_main();
     display_init();
     intialize_controls();
     game();

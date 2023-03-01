@@ -1,17 +1,22 @@
 /* Written by Felix Bergqvist Widström and Fredrik Berzins (2023) */
 
-#include <stdint.h>   /* Declarations of uint_32 and the like */
-#include <pic32mx.h>  /* Declarations of system-specific addresses etc */
+/*
+	Most functions written 2015 by Axel Isaksson
+	This copyright notice added 2015 by F Lundevall
+	For copyright and licensing, see file COPYING 
+
+	Code copied:
+		quicksleep()
+		_nmi_handler()
+		_on_reset()
+		_on_bootstrap()
+		textbuffer[][]
+		font[]
+*/
+
 #include "header.h"
 
-/* quicksleep:
-   A simple function to create a small delay.
-   Very inefficient use of computing resources,
-   but very handy in some special cases. */
-void quicksleep(int cyc) {
-	int i;
-	for(i = cyc; i > 0; i--);
-}
+void *stdout = (void *) 0;		// Disables stdout pointer
 
 int power(int base, int exp) {
     int out = 1;
@@ -25,6 +30,20 @@ int lower_8(int num) {
     num -= num%8;
     return num/8;
 }
+/* quicksleep:
+   A simple function to create a small delay.
+   Very inefficient use of computing resources,
+   but very handy in some special cases. */
+void quicksleep(int cyc) {
+	int i;
+	for(i = cyc; i > 0; i--);
+}
+/* Non-Maskable Interrupt; something bad likely happened, so hang */
+void _nmi_handler() {for(;;);}
+/* This function is called upon reset, before .data and .bss is set up */
+void _on_reset() {}
+/* This function is called before main() is called, you can do setup here */
+void _on_bootstrap() {}
 
 char textbuffer[4][16];
 
@@ -158,7 +177,6 @@ const uint8_t const font[] = {
 	0, 0, 4, 2, 4, 2, 0, 0,
 	0, 120, 68, 66, 68, 120, 0, 0,
 };
-
 /*
 	The display is defined as a array with width*height bits devideed into bytes for every 8 pixels vertical
 	so it's devided into 4 rows 8 pixels high and 128pixels wide and evey
@@ -183,7 +201,6 @@ uint8_t display[] = {
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 
 	// Row 1 
-
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -202,7 +219,6 @@ uint8_t display[] = {
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 
 	// Row 2 
-
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -221,7 +237,6 @@ uint8_t display[] = {
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 
 	// Row 3 
-
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
