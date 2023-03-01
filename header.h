@@ -65,8 +65,6 @@
       void move();
       void check_collision();
    // Misc
-      double double_mod(double);
-      int int_round(double);
       void quicksleep(int);
       int power(int, int);
       int lower_8(int);
