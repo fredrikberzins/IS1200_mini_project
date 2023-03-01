@@ -3,7 +3,7 @@
 #	Felix Bergqvist Widström
 #	and Fredrik Berzins
 #	(2023)
-#	Modefied version of delay from is1200 lab 1
+#	Modified version of delay from IS1200 Lab 1
 
 .global sleep
 

@@ -1,6 +1,6 @@
 # IS1200_mini_project
 ## Project Description
-Develop a version of pong for the chipKIT Uno32 board with a chipKIT Basic I/O shield as well as an optional control system.
+Develop a version of 2 player pong for the chipKIT Uno32 board with a chipKIT Basic I/O shield as well as an optional control system.
 
 ## Goal
 - The game must be rendered on a display.

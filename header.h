@@ -1,22 +1,32 @@
 /* Written by Felix Bergqvist Widström and Fredrik Berzins (2023) */
+/*
+	Some declarations written 2015 by Axel Isaksson
+	This copyright notice added 2015 by F Lundevall
+	For copyright and licensing, see file COPYING 
 
-#include <math.h>
+	Code copied:
+		Everything in the "display mode definitions" section
+*/
+
+#include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
+#include <pic32mx.h>
 
 // Global varibles/settings import from main
    // Display
-      extern int display_w;      // display width = pixels
-      extern int display_h;      // display height = pixels
+      extern int display_w;      // Display width = pixels
+      extern int display_h;      // Display height = pixels
    // Ball
-      extern int ball_s;         // ball size = pixels (it is a rectangle NOT ROUNDED)
+      extern int ball_s;         // Ball size = pixels (it is a rectangle NOT ROUNDED)
    // Player paddle
-      extern int paddle_w;       // paddle width = pixels
-      extern int paddle_h;       // paddle height = pixels
-      extern int paddle_s;       // paddle spacing to edge = pixels
+      extern int paddle_w;       // Paddle width = pixels
+      extern int paddle_h;       // Paddle height = pixels
+      extern int paddle_s;       // Paddle spacing to edge = pixels
    // Center dot/dot line
-      extern int dot_w;          // dot width = pixels (must be even)
-      extern int dot_h;          // dot height = pixels
-      extern int dot_s;          // dot spacing to edge = pixels
+      extern int dot_w;          // Dot width = pixels (must be even)
+      extern int dot_h;          // Dot height = pixels
+      extern int dot_s;          // Dot spacing to edge = pixels
    // Display/Font/Text
       // Declare bitmap array for display
       extern uint8_t display[512];
@@ -25,7 +35,7 @@
       // Declare text buffer for display output
       extern char textbuffer[4][16];
       
-// Screan related
+// Screen related
    // Display mode defintions:
       // Command/data mode
          #define DISPLAY_CHANGE_TO_COMMAND_MODE (PORTFCLR = 0x10)
@@ -44,12 +54,10 @@
       uint8_t spi_send_recv(uint8_t );
    // Display effects a larger area
       void display_init();
-      void display_main();
       void display_update();
-      void display_string(int , char *);
-      void display_image(int , const uint8_t *);
       void display_clear();
-   // Print effects specific aresas
+      void display_image(const uint8_t *);
+   // Print effects specific areas
       void print_start_screen();
       void print_end_screen(int player);
       void print_string(int, char *);
@@ -64,8 +72,13 @@
       void initialize_controls();
       void move();
       void check_collision();
+      void game();
    // Misc
-      void quicksleep(int);
+      void sleep(int);
       int power(int, int);
       int lower_8(int);
-      void sleep(int);
+      void quicksleep(int);
+   // Stubs   
+      void _nmi_handler();
+      void _on_reset();
+      void _on_bootstrap();
