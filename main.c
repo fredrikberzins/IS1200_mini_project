@@ -1,3 +1,5 @@
+/* Written by Felix Bergqvist Widström and Fredrik Berzins (2023) */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pic32mx.h>
@@ -10,7 +12,7 @@ int display_w = 128;    // display width = pixels
 int display_h = 32;     // display height = pixels
 // Ball
 int ball_s = 2;         // ball size = pixels (it is a rectangle NOT ball(rounded rectangle))
-double ball_v = 1;    // ball speed
+double ball_v = 1;      // ball speed
 // Player paddle
 int paddle_w = 3;       // paddle width = pixels
 int paddle_h = 10;      // paddle height = pixels
@@ -46,7 +48,7 @@ static controls_t controls;
 int quit = 0;
 
 //Functions
-void initialize() {         //Set necessary values and display items
+void initialize() {         //Set necessary values and display necessary items
     display_clear();
     ball.w = ball_s;
     ball.h = ball_s;
@@ -67,7 +69,7 @@ void initialize() {         //Set necessary values and display items
     display_image(0, display);
 }
 
-void update_controls() {
+void update_controls() {    // Checks for inputs and sets values for movement (LEDs for debug)
     if (PORTF & 0x2) {      // 0000 0010 (PORTF)    BTN1
         controls.up2 = 1;
         PORTESET = 0x1;
@@ -102,7 +104,7 @@ void update_controls() {
 }
 
 
-bool check_controls() {
+bool check_controls() {     // Checks if a button is pressed and returns true or false
     if (PORTF & 0x2) {
         return true;
     }
@@ -120,12 +122,13 @@ bool check_controls() {
     return false;
 }
 
-void intialize_controls() {
-    PORTFSET = 0x2;
+void intialize_controls() { // Sets pins as inputs or outputs for buttons and LEDs
+    TRISECLR = 0xFF;
+    PORTFSET = 0x02;
     PORTDSET = 0xE0;
 }
 
-void move() {
+void move() {               // Updates position values for paddles depending on currently active controls
     if (controls.up1 == 1 && controls.down1 != 1) {
         paddles[0].y -= paddle_v;
         if (paddles[0].y <= 0){
@@ -160,7 +163,7 @@ void move() {
     }
 }
 
-void check_collision() {
+void check_collision() {    // Changes direction of the ball on collision with paddles and the top/bottom of the screen or ends the game if the ball misses a paddle
     if ((int)(ball.x) + ball_s >= display_w-1) {
         quit = 1;
     }
@@ -179,9 +182,9 @@ void check_collision() {
     }
 }
 
-void game() {
+void game() {               // Game loop for restarting on win/loss
     print_start_screen();
-    while (true) {      // Wait for button press
+    while (true) {          // Wait for button press
         if (check_controls()) {
             break;
         }
@@ -196,11 +199,11 @@ void game() {
         ball.x += ball.dx;
         ball.y += ball.dy;
         check_collision();
-        sleep(10); // limits program to update once every 30 ms
+        sleep(10);          // limits program to update once every 30 ms
     }
     print_end_screen(quit);
-    sleep(1000);
-    while (true) {      // Wait for button press
+    sleep(500);
+    while (true) {          // Wait for button press
         if (check_controls()) {
             quit = 0;
             game();

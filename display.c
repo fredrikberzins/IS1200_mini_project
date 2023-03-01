@@ -1,3 +1,5 @@
+/* Written by Felix Bergqvist Widström and Fredrik Berzins (2023) */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pic32mx.h>
@@ -175,7 +177,7 @@ void print_end_screen(int player) {
     display_update();
 }
 
-// print string with font from font_data.c
+// print string with font from mipslabdata.c
 void print_string(int line, char *str) {
 	int i;
 	if(line >= 0 || line < 4 || str) {
@@ -208,7 +210,6 @@ void print_solid(int color, int x1, int y1, int x2, int y2) {
         y2 = temp;
     }
     // loops thru all pixels in specified area.
-
 	for (int x = x1; x <= x2; x++) {
 		for(int y = y1; y <= y2; y++) {
 			int row = lower_8(y);

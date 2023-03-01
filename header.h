@@ -1,5 +1,8 @@
+/* Written by Felix Bergqvist Widström and Fredrik Berzins (2023) */
+
 #include <math.h>
 #include <stdbool.h>
+
 // Global varibles/settings import from main
    // Display
       extern int display_w;      // display width = pixels
