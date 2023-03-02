@@ -10,8 +10,7 @@
 		display_init()		(Modified to include pin setups from main function in mipsmain.c)
 		display_update()
 		display_image() 	(Modified, to handle 128px wide image instead of 32px, removed one argument)
-		print_string()		(display_spring renamed to fit naming sceam)
-
+		print_string()		(display_string renamed to fit nameing scheme)
 */
 
 #include "header.h"
@@ -23,9 +22,10 @@ uint8_t spi_send_recv(uint8_t data) {
 	while(!(SPI2STAT & 1));
 	return SPI2BUF;
 }
+
 // display_init (from mipslabfunc.c)
 // Initialize the display by defining
-//	output pins, clock speed, SPI Master
+// output pins, clock speed, SPI Master
 void display_init(void) {
 	/*
 		This will set the peripheral bus clock to the same frequency
@@ -93,8 +93,9 @@ void display_init(void) {
 	
 	spi_send_recv(0xAF);
 }
+
 // display_update (from mipslabfunc.c)
-// Updates display if you have added any text in textbugffer
+// Updates display if you have added any text in textbuffer[][]
 void display_update(void) {
 	int i, j, k;
 	int c;
@@ -118,24 +119,26 @@ void display_update(void) {
 		}
 	}
 }
+
 // display_clear
-// Clears display from all pixels and text (total black screan)
+// Clears display from all pixels and text (Black screen)
 void display_clear(){
-	// Loops thru rows and sets text buffer to " "with the help of print string
+	// Loops through rows and sets text buffer to "" by using print_string()
 	for(int i = 0; i < 4; i++) {
 		print_string( i, "");
 	}
 	display_update();
-	// Loops thru all bytes in display array and setts all bits to 1(for all pixels to be off)
+	// Loops through all bytes in display array and sets all bits to 1 (for all pixels to be off)
 	for(int i = 0; i < 512; i++) {
 		display[i] = 0xff;
 	}
-	display_image(display);		// Print out empty display array/image
+	display_image(display);		// Print out empty display array/image (Updates screen based on display[])
 }
+
 // display_image (from mipslabfunc.c)
-// Prints a Image on the screan (modified to print a 128px wide img instead of 32px)
-// Arguments:
-//	const uint8_t *data: an array of 8bit values to symplice 8 pixels verticly on the display
+// Prints a Image on the screen (modified to print a 128px wide img instead of 32px)
+// Arguments: 
+// const uint8_t *data: an array of 8-bit values to represent 8 pixels vertically on the display
 void display_image(const uint8_t *data) {
 	int i, j;
 	
@@ -155,13 +158,13 @@ void display_image(const uint8_t *data) {
 	}
 }
 // print_start_screen
-// Clears screan and then prints start screan:
+// Clears screen and then prints start screen:
 //	PONG
 //	BY
 //	FELIX &
 //	FREDRIK
 void print_start_screen() {
-	display_clear();			// Clear to ensure no other textures ar in the way
+	display_clear();			// Clear to ensure no text is in the way
 	print_string( 0, " PONG");
 	print_string( 1, " BY");
 	print_string( 2, " FELIX &");
@@ -170,27 +173,26 @@ void print_start_screen() {
 }
 
 // print_end_screen
-// Clears screan and then prints end screan:
+// Clears screen and then prints end screen:
 //	Player NR:#
 //	WON PONG
-// Argument:
+// Argument: 
 //	int player: 1(Player 1 won(Left side)), any other(Player 2 won(Right side))
 void print_end_screen(int player) {
 	display_clear(); 		// Clear display from game related textures
-	// Check if player is 1 then print """player 1 won" else"" "player 2 won"
-	if(player == 1){
+	// Check if player is 1 then print "player 1 won" else "player 2 won"
+	if (player == 1) {
 		print_string( 0, " PLAYER NR:1");
-	}
-	else{
+	} else {
 		print_string( 0, " PLAYER NR:2");
 	}
 	print_string( 1, " WON PONG");
     display_update();		// Update to print out strings in textbuffer
 }
 
-// print_string (from mipsfunc.c) with font from miscfunc.c(mipslabdata.c)
+// print_string (from mipsfunc.c) with font from misc.c (mipslabdata.c)
 // Arguments:
-//	int line: int between 0 and 3 (defines what row(a row is 8px high) of the screan to print on)
+//	int line: int between 0 and 3 (defines what row(a row is 8px high) of the screen to print on)
 //	char *str: String with text max of 16 characters
 void print_string(int line, char *str) {
 	int i;
@@ -208,54 +210,53 @@ void print_string(int line, char *str) {
 }
 
 // print_solid
-// Prints a solid block ether with black or white
-// Argumetns:
-//	int color: 0 (black), any other(white)
+// Prints a solid block (black or white)
+// Arguments:
+//	int color: 0 (black), any other (white)
 // 	int x1:	int between 0 and display_w-1
 //	int y1: int between 0 and display_h-1
-//		x1,y1 is the upper right corner of the block
+//		x1,y1 is the upper left corner of the block
 //	int x2: int between 0 and display_w-1
 //	int y2: int between 0 and display_h-1
-//		x2,y2 is the lower left corner of the block
+//		x2,y2 is the lower right corner of the block
 void print_solid(int color, int x1, int y1, int x2, int y2) {
-    // Checks so x1 is smaller then x2
+    // Checks that x1 is smaller then x2
 	// If not swap them
     if (x1 > x2) {      
         int temp = x1;
         x1 = x2;
         x2 = temp;
     }
-    // Checks so y1 is smaller then y2
+    // Checks that y1 is smaller then y2
 	// If not swap them
     if (y1 > y2) {      
         int temp = y1;
         y1 = y2;
         y2 = temp;
     }
-    // Loops thru all pixels in specified area.
+    // Loops through all pixels in specified area.
 	for (int x = x1; x <= x2; x++) {
 		for(int y = y1; y <= y2; y++) {
 			int row = lower_8(y);	// row is the row number, it's used to get the right offset in the array
 			int rest_y = y%8;		// rest_y is to get the right bit in the byte
 			if (color == 0) {
-				// Copyes the byte in the array and changes the specific bit to 1.
+				// Copies the byte in the array and changes the specific bit to 1.
 				// By doing bitwise or 
 				display[x+row*128] = display[x+row*128] | power(2, rest_y); 	// Turn off all pixels within x1,y1,x2,y2
 			} else {
-				// Copyes the byte in the array and changes the specific bit to 0.
+				// Copies the byte in the array and changes the specific bit to 0.
 				// By doing bitwise and
 				display[x+row*128] = display[x+row*128] & ~power(2, rest_y); 	// Turn on all pixels within x1,y1,x2,y2
 			}
 		}
 	}
-	PORTECLR=0xE0;
 	display_image(display);
 }
 
-// print_dotted_line prints dotted line starting from top and cuts of last dot att bottom of screan.
-// Uses screan width to get center and dot_w, dot_h and dot_s, top get the right dot size and placment
+// print_dotted_line prints dotted line starting from top and cuts of last dot att bottom of screen.
+// Uses screen width to get center and dot_w, dot_h and dot_s, to get the right dot size and placement
 void print_dotted_line() {
-	// Loop thru all dots depending on dot_h, dot_s and display_h
+	// Loop through all dots depending on dot_h, dot_s and display_h
     for(int y=0; y<display_h; y += dot_h+dot_s) {
 		// Print out dots on center line
         if(y < (display_h-dot_h)) {
@@ -272,12 +273,12 @@ void print_dotted_line() {
 // move_ball
 // Erases the last ball positon and the reprints the ball in the new position
 // Argumetns:
-// 	int new_x:	int between 0 and display_w-ball_s-1
+// 	int new_x: int between 0 and display_w-ball_s-1
 //	int new_y: int between 0 and display_h-ball_s-1
-//		new_x,new_y is the upper right corner of the ball
+//		new_x,new_y is the upper left corner of the ball
 //	int old_x: int between 0 and display_w-ball_s-1
 //	int old_y: int between 0 and display_h-ball_s-1
-//		old_x,old_y is the upper right corner of the ball
+//		old_x,old_y is the upper left corner of the ball
 void move_ball(int new_x, int new_y, int old_x, int old_y) {
     // Erase ball by using old_x, old_y and ball_s
     print_solid(0, old_x, old_y, old_x+ball_s-1, old_y+ball_s-1);
@@ -287,11 +288,11 @@ void move_ball(int new_x, int new_y, int old_x, int old_y) {
 
 // move_paddle
 // Erases the paddles 
-// Argumetns:
-// 	int paddle_sel:	0(left paddle) or 1(right paddle)
-//	int new_pos: int between 0 and display_h-paddle_h-1 (hight of paddle from the top)
+// Arguments:
+// 	int paddle_sel:	0 (left paddle) or 1 (right paddle)
+//	int new_pos: int between 0 and display_h-paddle_h-1 (height of paddle from the top)
 void move_paddle(int paddle_sel, int new_pos) {
-    // Erase all pixels whear padle can be
+    // Erase all pixels where paddle can be
     print_solid(0, paddle_s+paddle_sel*(display_w-paddle_w-paddle_s*2), 0, paddle_s+paddle_sel*(display_w-paddle_w-paddle_s*2)+paddle_w-1, display_h-1);
     // Draw paddle depending on new_pos
     print_solid(1, paddle_s+paddle_sel*(display_w-paddle_w-paddle_s*2), new_pos, paddle_s+paddle_sel*(display_w-paddle_w-paddle_s*2)+paddle_w-1, new_pos+paddle_h-1);

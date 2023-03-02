@@ -16,8 +16,9 @@
 
 #include "header.h"
 
-void *stdout = (void *) 0;		// Disables stdout pointer
+void *stdout = (void *) 0;		// Disables stdout
 
+// Power function with base and exponent as arguments
 int power(int base, int exp) {
     int out = 1;
     for(int i = 0; i < exp; i++) {
@@ -26,22 +27,29 @@ int power(int base, int exp) {
     return out;
 }
 
+// Floors num to nearest multiple of 8
 int lower_8(int num) {
     num -= num%8;
     return num/8;
 }
-/* quicksleep:
-   A simple function to create a small delay.
-   Very inefficient use of computing resources,
-   but very handy in some special cases. */
+
+/* 
+	quicksleep:
+   	A simple function to create a small delay.
+   	Very inefficient use of computing resources,
+   	but very handy in some special cases. 
+*/
 void quicksleep(int cyc) {
 	int i;
 	for(i = cyc; i > 0; i--);
 }
+
 /* Non-Maskable Interrupt; something bad likely happened, so hang */
 void _nmi_handler() {for(;;);}
+
 /* This function is called upon reset, before .data and .bss is set up */
 void _on_reset() {}
+
 /* This function is called before main() is called, you can do setup here */
 void _on_bootstrap() {}
 
@@ -177,9 +185,10 @@ const uint8_t const font[] = {
 	0, 0, 4, 2, 4, 2, 0, 0,
 	0, 120, 68, 66, 68, 120, 0, 0,
 };
+
 /*
-	The display is defined as a array with width*height bits devideed into bytes for every 8 pixels vertical
-	so it's devided into 4 rows 8 pixels high and 128pixels wide and evey
+	The display is defined as a array with width*height bits divided into bytes for every 8 pixels vertical
+	so it's divided into 4 rows 8 pixels high and 128 pixels wide.
 */
 uint8_t display[] = {
 	// Row 0
