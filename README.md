@@ -12,3 +12,8 @@ Develop a version of 2 player pong for the chipKIT Uno32 board with a chipKIT Ba
 - Run 'make' in the current directory.
 - Run 'make install TTYDEV=/dev/ttyX' where X depends on your serial port.
     - Find the currently used serial port (X) with 'ls /dev' 
+
+## How to run the code
+- When compiled and uploded
+- The game can be stared by pressing any of the four buttons(500ms after the game is renderd in).
+- When the game is over you can exit the end screan by pressing any of the four buttons.
