@@ -172,6 +172,7 @@ void check_collision() {
     if ((int)(ball.y) + ball_s-1 >= display_h - 1 || (int)(ball.y) <= 0) {
         ball.dy = -ball.dy;
     }
+    // Loops to check for both paddles and that the ball is within the limits
     for (int i = 0; i < 2; i++) {
         if((int)(ball.x) + i*ball_s == (paddle_s + (paddle_w)) + i*(display_w-(paddle_s*2)-(paddle_w*2))) {
             if((int)(ball.y) <= (paddles[i].y + paddle_h - 1) && ((int)(ball.y) + ball_s - 1) >= paddles[i].y) {
