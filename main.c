@@ -183,13 +183,13 @@ void check_collision() {
 
 // Game loop for restarting on win/loss
 void game() {
+    initialize();                           // Initializes game starting point
+    sleep(500);
     while (true) {                          // Wait for button press
         if (check_controls()) {
             break;
         }
     }
-    initialize();                           // Initializes game starting point
-    sleep(500);
     while (quit == 0) {
         update_controls();                  // Update control values
         move();                             // Update position of paddles
@@ -214,7 +214,7 @@ int main() {
     display_init();                 // Initializes display
     intialize_controls();           // Enables controls
     print_start_screen();           // Prints start screen
-    sleep(1000);
+    sleep(3000);
     game();                         // Enter game-loop
     return 0;
 }
